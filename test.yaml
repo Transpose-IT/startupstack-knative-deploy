@@ -5,43 +5,37 @@ metadata:
   namespace: default
 spec:
   hosts:
-  - "bla.knative.acc.transpose-it.nl"
+  - test.knative.acc.transpose-it.nl
   gateways:
-  - knative-serving/knative-ingress-gateway
-  - knative-serving/cluster-local-gateway
-  - istio-system/ingressgateway
-  - mesh # applies to all the sidecars in the mesh
+  - knative-ingress-gateway.knative-serving.svc.cluster.local
   http:
   - match:
     - uri:
-        prefix: /
+        prefix: /bla
+    rewrite:
+      authority: test4.default.knative.acc.transpose-it.nl
     route:
     - destination:
-        host: test123.default.svc.cluster.local
+        host: istio-ingressgateway.istio-system.svc.cluster.local
         port:
           number: 80
-
----
-apiVersion: networking.istio.io/v1alpha3
-kind: DestinationRule
-metadata:
-  name: test-destinationrule
-  namespace: default
-spec:
-  host: test123.default.svc.cluster.local
-  trafficPolicy:
-    loadBalancer:
-      simple: LEAST_CONN
-
+  - match:
+    - uri:
+        prefix: /
+    rewrite:
+      authority: test1.default.knative.acc.transpose-it.nl
+    route:
+    - destination:
+        host: istio-ingressgateway.istio-system.svc.cluster.local
+        port:
+          number: 80
 
 ---
 apiVersion: serving.knative.dev/v1 # Current version of Knative
 kind: Service
 metadata:
-  name: test123 # The name of the app
+  name: test1 # The name of the app
   namespace: default # The namespace the app will use
-  labels:
-    serving.knative.dev/visibility: cluster-local
 spec:
   template:
     spec:
@@ -49,4 +43,19 @@ spec:
         - image: gcr.io/knative-samples/helloworld-go # The URL to the image of the app
           env:
             - name: TARGET # The environment variable printed out by the sample app
-              value: "Go Sample v1"
+              value: "test1"
+
+---
+apiVersion: serving.knative.dev/v1 # Current version of Knative
+kind: Service
+metadata:
+  name: test4 # The name of the app
+  namespace: default # The namespace the app will use
+spec:
+  template:
+    spec:
+      containers:
+        - image: gcr.io/knative-samples/helloworld-go # The URL to the image of the app
+          env:
+            - name: TARGET # The environment variable printed out by the sample app
+              value: "test4"
