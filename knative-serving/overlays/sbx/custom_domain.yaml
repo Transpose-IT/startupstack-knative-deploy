@@ -1,0 +1,10 @@
+apiVersion: v1
+data:
+  knative.sbx.transpose-it.nl: ""
+  knative.acc.transpose-it.nl: ""
+kind: ConfigMap
+metadata:
+  labels:
+    serving.knative.dev/release: "v0.10.0"
+  name: config-domain
+  namespace: knative-serving

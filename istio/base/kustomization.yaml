@@ -1,0 +1,12 @@
+commonLabels:
+  app: transposeless
+resources:
+  - Base.yaml
+  - Citadel.yaml
+  - EgressGateway.yaml
+  - IngressGateway.yaml
+  - Injector.yaml
+  - Pilot.yaml
+  - Policy.yaml
+  - Telemetry.yaml
+  

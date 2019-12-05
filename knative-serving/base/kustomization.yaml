@@ -1,0 +1,13 @@
+commonLabels:
+  app: transposeless
+resources:
+  - Base.yaml
+  - rbac.yaml
+  - configmaps.yaml
+  - deployments.yaml
+  - gateways.yaml
+  - horizontal_pod_autoscaler.yaml
+  - images.yaml
+  - apiservices.yaml
+  - services.yaml
+  - webhooks.yaml
